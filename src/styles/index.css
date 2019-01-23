@@ -69,15 +69,14 @@ input[type=password] {
 .sidebar {
   min-width: 300px;
   width: 300px;
-  background-color: #eee;
+  background-color: #eee5;
 }
 
-.content {
+.main__content {
   position: relative;
   flex: 1;
   background-color: white;
   border-radius: 10px;
-  -webkit-box-shadow: -7px 0 19px -1px rgba(0, 0, 0, 0.18);
   box-shadow: -7px 0 19px -1px rgba(0, 0, 0, 0.18);
   padding: 4.6rem;
   z-index: 2;
@@ -86,7 +85,7 @@ input[type=password] {
 }
 
 .search__block {
-  padding: 1rem;
+  padding: 1rem .5em;
 }
 
 .contact__list {
