@@ -1,12 +1,12 @@
 import React from 'react'
 
-import SearchBlock from './search_block'
+import SidebarHead from './sidebar_head'
 import ContactList from './contact_list'
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
-      <SearchBlock />
+      <SidebarHead />
       <ContactList />
     </div>
   )

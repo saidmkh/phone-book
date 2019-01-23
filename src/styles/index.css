@@ -17,6 +17,7 @@ input[type=password] {
 
 html {
   font-size: 10px;
+  line-height: 1.4;
 }
 
 body {
@@ -72,6 +73,16 @@ input[type=password] {
   background-color: #eee5;
 }
 
+.sidebar__head {
+  display: flex;
+  padding: 1rem .5em;
+}
+
+.search_block {
+  flex: auto;
+  margin-right: .7rem;
+}
+
 .main__content {
   position: relative;
   flex: 1;
@@ -82,10 +93,6 @@ input[type=password] {
   z-index: 2;
   transition: 0.5s;
   overflow-y: auto;
-}
-
-.search__block {
-  padding: 1rem .5em;
 }
 
 .contact__list {
