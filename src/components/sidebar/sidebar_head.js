@@ -11,25 +11,71 @@ import {
 } from 'semantic-ui-react'
 
 import SearchBlock from './search_block'
+import { changeStateValue } from '../../_helpers/functions'
+import { storage } from '../../config/firebase'
+import { databaseRef } from '../../firebase/firebase_refs'
 
 class SidebarHead extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      fullname: '',
+      phone: '',
+      email: '',
+      company: '',
+      photoUrl: '',
+      image: null,
       open: false
     }
+
+    this.handleImageChange = this.handleImageChange.bind(this)
+    this.uploadPhoto = this.uploadPhoto.bind(this)
   }
 
   open = () => this.setState({ open: true })
 
   close = () => this.setState({ open: false })
 
+  handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      const { image } = this.props
+      this.setState(() => ({ image }))
+    }
+  }
+
+  uploadPhoto = () => {
+    const { image } = this.state
+    console.log(storage)
+    console.log(databaseRef)
+    const uploadTask = storage.ref(`images/${image.name}`)
+      .put(image);
+    uploadTask.on('state_changed',
+      snapshot => {
+        console.log(snapshot)
+      },
+      err => {
+        console.log(err)
+      },
+      () => {
+        storage.ref('images').child(image.name).getDownloadURL()
+          .then(url => {
+            console.log(url)
+            this.setState({
+              photoUrl: url
+            })
+          })
+      }
+    )
+  }
+
   render() {
-    const { open } = this.state
+    const { fullname, phone, email, company, photoUrl, open } = this.state
 
     return (
       <div className="sidebar__head">
+
         <SearchBlock />
+
         <Modal
           size='small'
           open={open}
@@ -42,17 +88,17 @@ class SidebarHead extends Component {
           <Modal.Content>
             <Image
               centered
-              src={this.state.url || 'https://react.semantic-ui.com/images/wireframe/image.png'}
+              src={photoUrl || 'https://react.semantic-ui.com/images/wireframe/image.png'}
               size='small'
               rounded
             />
             <input
               type="file"
-              onChange={this.handleChange}
+              onChange={this.handleImageChange}
             />
-            <Button color='orange'>
+            <Button onClick={this.uploadPhoto} color='orange'>
               <Icon name='upload' /> upload
-              </Button>
+            </Button>
             <Divider />
             <Grid padded>
               <Grid.Row stretched>
@@ -60,6 +106,9 @@ class SidebarHead extends Component {
                   icon='user'
                   iconPosition='left'
                   placeholder='Fullname'
+                  name='fullname'
+                  value={fullname}
+                  onChange={changeStateValue.bind(this)}
                 />
               </Grid.Row>
               <Grid.Row>
@@ -67,6 +116,9 @@ class SidebarHead extends Component {
                   icon='phone'
                   iconPosition='left'
                   placeholder='Phone number'
+                  name='phone'
+                  value={phone}
+                  onChange={changeStateValue.bind(this)}
                 />
               </Grid.Row>
               <Grid.Row>
@@ -74,6 +126,9 @@ class SidebarHead extends Component {
                   icon='mail'
                   iconPosition='left'
                   placeholder='Email'
+                  name='email'
+                  value={email}
+                  onChange={changeStateValue.bind(this)}
                 />
               </Grid.Row>
               <Grid.Row>
@@ -81,6 +136,9 @@ class SidebarHead extends Component {
                   icon='briefcase'
                   iconPosition='left'
                   placeholder='Company'
+                  name='company'
+                  value={company}
+                  onChange={changeStateValue.bind(this)}
                 />
               </Grid.Row>
             </Grid>
