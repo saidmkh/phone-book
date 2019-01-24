@@ -16,8 +16,8 @@ class Content extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      edit_modal: false,
-      delete_modal: false
+      open: false,
+      edit: false
     }
   }
 
@@ -26,7 +26,7 @@ class Content extends Component {
   close = () => this.setState({ open: false })
 
   render() {
-    const { edit_modal, delete_modal } = this.state
+    const { open, edit } = this.state
 
     return (
       <div className="main__content">
@@ -38,101 +38,73 @@ class Content extends Component {
               rounded
             />
             <Item.Content>
-              <Item.Header>Content A</Item.Header>
-              <Item.Extra>
-                <Icon color='green' name='phone' /> 888-888-888
-              </Item.Extra>
-              <Divider />
-              <Item.Extra>
-                <Icon color='green' name='mail' /> dsadsa@gfdsa.com
-              </Item.Extra>
-              <Item.Extra>
-                <Icon color='green' name='briefcase' /> Jobj
-              </Item.Extra>
+              {edit ?
+                <React.Fragment>
+                  <Input value='Hello Helloev' size='big' />
+                  <Item.Extra>
+                    <Input iconPosition='left' icon='phone' value='888-888-999' />
+                  </Item.Extra>
+                  <Divider />
+                  <Item.Extra>
+                    <Input iconPosition='left' icon='mail' value='dada@gdad.com' />
+                  </Item.Extra>
+                  <Item.Extra>
+                    <Input iconPosition='left' icon='briefcase' value='Jobj' />
+                  </Item.Extra>
+
+                  <Item.Extra>
+                    <Button
+                      color='green'
+                      title='Save'
+                      icon='save'
+                      floated='right'
+                      onClick={() => this.setState({ edit: false })}
+                    />
+                    <Button
+                      color='orange'
+                      title='Cancel'
+                      icon='delete'
+                      floated='right'
+                      onClick={() => this.setState({ edit: false })}
+                    />
+                  </Item.Extra>
+                </React.Fragment>
+                :
+                <React.Fragment>
+                  <Item.Header>Хало Халовев</Item.Header>
+                  <Item.Extra>
+                    <Icon color='green' name='phone' /> 888-888-888
+                  </Item.Extra>
+                  <Divider />
+                  <Item.Extra>
+                    <Icon color='green' name='mail' /> dsadsa@gfdsa.com
+                  </Item.Extra>
+                  <Item.Extra>
+                    <Icon color='green' name='briefcase' /> Jobj
+                   </Item.Extra>
+                </React.Fragment>
+              }
               <Item.Extra>
                 <Button
                   floated='right'
-                  icon='delete'
+                  icon='trash alternate outline'
                   color='red'
-                  name='delete_modal'
+                  title='Delete'
                   onClick={this.open}
                 />
                 <Confirm
                   size='mini'
-                  open={delete_modal}
+                  open={open}
                   onCancel={this.close}
                   onConfirm={this.close}
                 />
-                <Modal
-                  size='small'
-                  name='edit_modal'
-                  open={edit_modal}
-                  onOpen={this.open}
-                  onClose={this.close}
-                  trigger={
-                    <Button
-                      color='yellow'
-                      icon='edit'
-                      floated='right'
-                    />}
-                  closeIcon
-                >
-                  <Header content='Update contact' />
-                  <Modal.Content>
-                    <Image
-                      centered
-                      src={this.state.url || 'https://react.semantic-ui.com/images/wireframe/image.png'}
-                      size='small'
-                      rounded
-                    />
-                    <input
-                      type="file"
-                      onChange={this.handleChange}
-                    />
-                    <Button color='orange'>
-                      <Icon name='upload' /> upload
-                    </Button>
-                    <Divider />
-                    <Grid padded>
-                      <Grid.Row stretched>
-                        <Input
-                          icon='user'
-                          iconPosition='left'
-                          placeholder='Fullname'
-                        />
-                      </Grid.Row>
-                      <Grid.Row>
-                        <Input
-                          icon='phone'
-                          iconPosition='left'
-                          placeholder='Phone number'
-                        />
-                      </Grid.Row>
-                      <Grid.Row>
-                        <Input
-                          icon='mail'
-                          iconPosition='left'
-                          placeholder='Email'
-                        />
-                      </Grid.Row>
-                      <Grid.Row>
-                        <Input
-                          icon='briefcase'
-                          iconPosition='left'
-                          placeholder='Company'
-                        />
-                      </Grid.Row>
-                    </Grid>
-                  </Modal.Content>
-                  <Modal.Actions>
-                    <Button color='red' onClick={this.close}>
-                      <Icon name='remove' /> Close
-                    </Button>
-                    <Button color='green' onClick={this.close}>
-                      <Icon name='checkmark' /> Save
-                    </Button>
-                  </Modal.Actions>
-                </Modal>
+                <Button
+                  color='yellow'
+                  title='Edit'
+                  icon='edit'
+                  floated='right'
+                  onClick={() => this.setState({ edit: true })}
+                />
               </Item.Extra>
             </Item.Content>
           </Item>
