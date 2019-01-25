@@ -1,4 +1,4 @@
-import { contactsRef } from '../firebase/firebase_refs'
+import { contactsRef } from '../config/firebase'
 import { GET_CONTACTS } from './types'
 
 export const getContacts = () => dispatch => {

@@ -1,19 +1,15 @@
-import firebase from 'firebase/app';
+import * as firebase from "firebase";
 import 'firebase/storage';
 
-const config = {
-  apiKey: "AIzaSyBeQcQlfQA5OpY_IZ1Mpi9qTZFiNDw86wY",
-  authDomain: "phone-book-63384.firebaseapp.com",
-  databaseURL: "https://phone-book-63384.firebaseio.com",
-  projectId: "phone-book-63384",
-  storageBucket: "phone-book-63384.appspot.com",
-  messagingSenderId: "870252849132"
-};
+import databaseConfig from './firebase_keys'
 
-firebase.initializeApp(config);
+firebase.initializeApp(databaseConfig);
+export const phoneBookStorage = firebase.storage();
 
-const storage = firebase.storage();
+console.log('firebase', firebase)
+console.log('storage', phoneBookStorage)
 
-export {
-  storage, firebase as default
-}
+const databaseRef = firebase.database().ref()
+
+export const contactsRef = databaseRef.child('contacts')
+

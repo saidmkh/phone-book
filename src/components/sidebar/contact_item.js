@@ -4,11 +4,11 @@ import { Image, List } from 'semantic-ui-react'
 const ContactItem = (props) => {
   return (
     <List.Item>
-      <Image avatar src='https://react.semantic-ui.com/images/avatar/small/helen.jpg' />
+      <Image avatar src={props.obj.photoUrl} />
       <List.Content>
-        <List.Header>Snickerdoodle</List.Header>
-        An excellent companion
-        </List.Content>
+        <List.Header>{props.obj.fullname}</List.Header>
+        {props.obj.phone}
+      </List.Content>
     </List.Item>
   )
 }

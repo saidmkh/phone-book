@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import {
   Grid,
   Button,
@@ -7,18 +8,19 @@ import {
   Icon,
   Input,
   Modal,
-  Divider
+  Divider,
+  Form
 } from 'semantic-ui-react'
 
 import SearchBlock from './search_block'
 import { changeStateValue } from '../../_helpers/functions'
-import { storage } from '../../config/firebase'
-import { databaseRef } from '../../firebase/firebase_refs'
+import { phoneBookStorage, contactsRef } from '../../config/firebase'
+import { addContact } from '../../action/contacts'
 
 class SidebarHead extends Component {
   constructor(props) {
     super(props)
-    this.state = {
+    this.initialState = {
       fullname: '',
       phone: '',
       email: '',
@@ -28,13 +30,20 @@ class SidebarHead extends Component {
       open: false
     }
 
+    this.state = { ...this.initialState }
+
     this.handleImageChange = this.handleImageChange.bind(this)
     this.uploadPhoto = this.uploadPhoto.bind(this)
+    this.saveContact = this.saveContact.bind(this)
+  }
+
+  resetState = () => {
+    this.setState({ ...this.initialState })
   }
 
   open = () => this.setState({ open: true })
 
-  close = () => this.setState({ open: false })
+  close = () => this.resetState()
 
   handleImageChange = (e) => {
     if (e.target.files[0]) {
@@ -45,9 +54,9 @@ class SidebarHead extends Component {
 
   uploadPhoto = () => {
     const { image } = this.state
-    console.log(storage)
-    console.log(databaseRef)
-    const uploadTask = storage.ref(`images/${image.name}`)
+    console.log(phoneBookStorage.ref())
+    console.log(contactsRef)
+    const uploadTask = phoneBookStorage.ref(`images/${image.name}`)
       .put(image);
     uploadTask.on('state_changed',
       snapshot => {
@@ -57,7 +66,7 @@ class SidebarHead extends Component {
         console.log(err)
       },
       () => {
-        storage.ref('images').child(image.name).getDownloadURL()
+        phoneBookStorage.ref('images').child(image.name).getDownloadURL()
           .then(url => {
             console.log(url)
             this.setState({
@@ -66,6 +75,25 @@ class SidebarHead extends Component {
           })
       }
     )
+  }
+
+  saveContact = (e) => {
+    e.preventDefault()
+
+    const { fullname, phone, email, company, photoUrl, open } = this.state
+    const { addContact } = this.props
+
+    const Contact = {
+      fullname,
+      phone,
+      email,
+      company,
+      photoUrl
+    }
+
+    addContact(Contact)
+
+    this.resetState()
   }
 
   render() {
@@ -86,75 +114,84 @@ class SidebarHead extends Component {
         >
           <Header content='Create new contact' />
           <Modal.Content>
-            <Image
-              centered
-              src={photoUrl || 'https://react.semantic-ui.com/images/wireframe/image.png'}
-              size='small'
-              rounded
-            />
-            <input
-              type="file"
-              onChange={this.handleImageChange}
-            />
-            <Button onClick={this.uploadPhoto} color='orange'>
-              <Icon name='upload' /> upload
-            </Button>
-            <Divider />
-            <Grid padded>
-              <Grid.Row stretched>
-                <Input
-                  icon='user'
-                  iconPosition='left'
-                  placeholder='Fullname'
-                  name='fullname'
-                  value={fullname}
-                  onChange={changeStateValue.bind(this)}
-                />
-              </Grid.Row>
-              <Grid.Row>
-                <Input
-                  icon='phone'
-                  iconPosition='left'
-                  placeholder='Phone number'
-                  name='phone'
-                  value={phone}
-                  onChange={changeStateValue.bind(this)}
-                />
-              </Grid.Row>
-              <Grid.Row>
-                <Input
-                  icon='mail'
-                  iconPosition='left'
-                  placeholder='Email'
-                  name='email'
-                  value={email}
-                  onChange={changeStateValue.bind(this)}
-                />
-              </Grid.Row>
-              <Grid.Row>
-                <Input
-                  icon='briefcase'
-                  iconPosition='left'
-                  placeholder='Company'
-                  name='company'
-                  value={company}
-                  onChange={changeStateValue.bind(this)}
-                />
-              </Grid.Row>
-            </Grid>
+            <Form onSubmit={this.saveContact}>
+              <Image
+                centered
+                src={photoUrl || 'https://react.semantic-ui.com/images/wireframe/image.png'}
+                size='small'
+                rounded
+              />
+              <input
+                type="file"
+                onChange={this.handleImageChange}
+              />
+              <Button onClick={this.uploadPhoto} color='orange'>
+                <Icon name='upload' /> upload
+              </Button>
+              <Divider />
+              <Grid padded>
+                <Grid.Row stretched>
+                  <Input
+                    icon='user'
+                    iconPosition='left'
+                    placeholder='Fullname'
+                    name='fullname'
+                    value={fullname}
+                    onChange={changeStateValue.bind(this)}
+                    required
+                  />
+                </Grid.Row>
+                <Grid.Row>
+                  <Input
+                    icon='phone'
+                    iconPosition='left'
+                    placeholder='Phone number'
+                    name='phone'
+                    value={phone}
+                    onChange={changeStateValue.bind(this)}
+                    required
+                  />
+                </Grid.Row>
+                <Grid.Row>
+                  <Input
+                    icon='mail'
+                    iconPosition='left'
+                    placeholder='Email'
+                    name='email'
+                    value={email}
+                    onChange={changeStateValue.bind(this)}
+                    required
+                  />
+                </Grid.Row>
+                <Grid.Row>
+                  <Input
+                    icon='briefcase'
+                    iconPosition='left'
+                    placeholder='Company'
+                    name='company'
+                    value={company}
+                    onChange={changeStateValue.bind(this)}
+                    required
+                  />
+                </Grid.Row>
+              </Grid>
+              <Modal.Actions>
+                <Button color='red' onClick={this.close}>
+                  <Icon name='remove' /> Close
+                </Button>
+                <Button
+                  type='submit'
+                  color='green'
+                >
+                  <Icon name='checkmark' /> Save
+                </Button>
+              </Modal.Actions>
+            </Form>
           </Modal.Content>
-          <Modal.Actions>
-            <Button color='red' onClick={this.close}>
-              <Icon name='remove' /> Close
-            </Button>
-            <Button color='green' onClick={this.close}>
-              <Icon name='checkmark' /> Save
-            </Button>
-          </Modal.Actions>
         </Modal>
       </div >
     )
   }
 }
 
-export default SidebarHead
+export default connect(null, { addContact })(SidebarHead)
