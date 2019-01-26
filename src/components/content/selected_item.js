@@ -13,20 +13,41 @@ import {
   Confirm
 } from 'semantic-ui-react'
 
-import { deleteContact, selectContact } from '../../action/contacts'
+import { deleteContact, selectContact, updateContact } from '../../action/contacts'
+import { changeStateValue } from '../../_helpers/functions'
 
 class SelectedItem extends Component {
   constructor(props) {
     super(props)
-    this.state = {
+    this.initialState = {
+      fullname: '',
+      phone: '',
+      email: '',
+      company: '',
       open: false,
       edit: false
     }
+
+    this.state = { ...this.initialState }
+  }
+
+  resetState = () => {
+    this.setState({ ...this.initialState })
   }
 
   open = () => this.setState({ open: true })
 
   close = () => this.setState({ open: false })
+
+  editClick = () => {
+    this.setState({
+      edit: true,
+      fullname: this.props.contact.fullname,
+      phone: this.props.contact.phone,
+      email: this.props.contact.email,
+      company: this.props.contact.company
+    })
+  }
 
   removeContact = (contactId) => {
     this.props.deleteContact(contactId)
@@ -34,8 +55,24 @@ class SelectedItem extends Component {
     this.setState({ open: false })
   }
 
+  updateContact = (contactId) => {
+    const Contact = {
+      fullname: this.state.fullname,
+      phone: this.state.phone,
+      email: this.state.email,
+      company: this.state.company
+    }
+
+    //this.props.updateContact(Contact, contactId)
+  }
+
+  componentWillUnmount() {
+    this.resetState()
+  }
+
   render() {
-    const { open, edit } = this.state
+    console.log('state', this.state)
+    const { open, edit, fullname, phone, email, company } = this.state
     const { contact, contactId } = this.props
 
     return (
@@ -47,27 +84,46 @@ class SelectedItem extends Component {
             rounded
           />
           <Item.Content>
+
             {edit ?
               <React.Fragment>
-                <Input value={contact.fullname} size='big' />
+                <Input
+                  value={fullname}
+                  onChange={changeStateValue.bind(this)}
+                  size='big'
+                />
                 <Item.Extra>
-                  <Input iconPosition='left' icon='phone' value={contact.phone} />
+                  <Input
+                    iconPosition='left'
+                    icon='phone'
+                    value={phone}
+                    onChange={changeStateValue.bind(this)}
+                  />
                 </Item.Extra>
                 <Divider />
                 <Item.Extra>
-                  <Input iconPosition='left' icon='mail' value={contact.email} />
+                  <Input
+                    iconPosition='left'
+                    icon='mail'
+                    value={email}
+                    onChange={changeStateValue.bind(this)}
+                  />
                 </Item.Extra>
                 <Item.Extra>
-                  <Input iconPosition='left' icon='briefcase' value={contact.company} />
+                  <Input
+                    iconPosition='left'
+                    icon='briefcase'
+                    value={company}
+                    onChange={changeStateValue.bind(this)}
+                  />
                 </Item.Extra>
-
                 <Item.Extra>
                   <Button
                     color='green'
                     title='Save'
                     icon='save'
                     floated='right'
-                    onClick={() => this.setState({ edit: false })}
+                    onClick={this.updateContact(contactId)}
                   />
                   <Button
                     color='orange'
@@ -93,6 +149,7 @@ class SelectedItem extends Component {
                 </Item.Extra>
               </React.Fragment>
             }
+
             <Item.Extra>
               <Button
                 floated='right'
@@ -112,7 +169,7 @@ class SelectedItem extends Component {
                 title='Edit'
                 icon='edit'
                 floated='right'
-                onClick={() => this.setState({ edit: true })}
+                onClick={this.editClick}
               />
             </Item.Extra>
           </Item.Content>
@@ -130,6 +187,7 @@ const mapStateToProps = store => ({
 export default connect(mapStateToProps,
   {
     deleteContact,
-    selectContact
+    selectContact,
+    updateContact
   })
   (SelectedItem)

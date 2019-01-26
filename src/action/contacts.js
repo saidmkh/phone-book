@@ -18,6 +18,10 @@ export const deleteContact = contactId => dispatch => {
   contactsRef.child(contactId).remove()
 }
 
+export const updateContact = (contact, contactId) => dispatch => {
+  contactsRef.child(contactId).update({ contact })
+}
+
 export const selectContact = contact => dispatch => {
   dispatch({
     type: SELECT_CONTACT,

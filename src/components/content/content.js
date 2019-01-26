@@ -16,7 +16,7 @@ class Content extends Component {
     } else {
       return (
         <div className="detail-placeholder">
-          Select a client to check info
+          Select a contact
         </div>
       )
     }

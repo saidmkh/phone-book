@@ -8,7 +8,7 @@ import { getContacts } from '../../action/contacts'
 
 class ContactList extends Component {
   state = {
-    contacts: []
+    contacts: this.props.contacts
   }
 
   componentDidMount() {
@@ -19,7 +19,6 @@ class ContactList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.contacts.foundContacts)
     this.setState({
       contacts: nextProps.foundContacts
     })

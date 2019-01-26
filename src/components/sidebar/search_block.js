@@ -15,10 +15,10 @@ class SearchBlock extends Component {
       if (value === '') {
         return true
       } else {
-        let fullnameValue = item[1].fullname.indexOf(value) !== -1
-        let phoneValue = item[1].phone.indexOf(value) !== -1
-        let emailValue = item[1].email.indexOf(value) !== -1
-        let companyValue = item[1].company.indexOf(value) !== -1
+        let fullnameValue = item[1].fullname.toLowerCase().indexOf(value) !== -1
+        let phoneValue = item[1].phone.toLowerCase().indexOf(value) !== -1
+        let emailValue = item[1].email.toLowerCase().indexOf(value) !== -1
+        let companyValue = item[1].company.toLowerCase().indexOf(value) !== -1
 
         return fullnameValue || phoneValue || emailValue || companyValue
       }
