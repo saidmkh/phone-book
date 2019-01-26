@@ -12,11 +12,12 @@ class ContactList extends Component {
   }
 
   render() {
-    console.log(this.props.contacts)
+    const { contacts } = this.props
+
     return (
       <div className="contact__list">
         <List selection>
-          {this.props.contacts.map((obj, idx) => {
+          {contacts.map((obj, idx) => {
             return (
               <ContactItem
                 key={idx}

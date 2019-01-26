@@ -47,20 +47,18 @@ class SidebarHead extends Component {
 
   handleImageChange = (e) => {
     if (e.target.files[0]) {
-      const { image } = this.props
-      this.setState(() => ({ image }))
+      const image = e.target.files[0]
+      this.setState({ image: image })
     }
   }
 
   uploadPhoto = () => {
     const { image } = this.state
-    console.log(phoneBookStorage.ref())
-    console.log(contactsRef)
-    const uploadTask = phoneBookStorage.ref(`images/${image.name}`)
-      .put(image);
-    uploadTask.on('state_changed',
+    console.log(image)
+    const uploadImage = phoneBookStorage.ref(`images/${image.name}`).put(image);
+    uploadImage.on('state_changed',
       snapshot => {
-        console.log(snapshot)
+
       },
       err => {
         console.log(err)
@@ -68,7 +66,6 @@ class SidebarHead extends Component {
       () => {
         phoneBookStorage.ref('images').child(image.name).getDownloadURL()
           .then(url => {
-            console.log(url)
             this.setState({
               photoUrl: url
             })
@@ -80,7 +77,7 @@ class SidebarHead extends Component {
   saveContact = (e) => {
     e.preventDefault()
 
-    const { fullname, phone, email, company, photoUrl, open } = this.state
+    const { fullname, phone, email, company, photoUrl } = this.state
     const { addContact } = this.props
 
     const Contact = {
@@ -105,7 +102,7 @@ class SidebarHead extends Component {
         <SearchBlock />
 
         <Modal
-          size='small'
+          size='tiny'
           open={open}
           onOpen={this.open}
           onClose={this.close}
@@ -130,7 +127,7 @@ class SidebarHead extends Component {
               </Button>
               <Divider />
               <Grid padded>
-                <Grid.Row stretched>
+                <Grid.Row>
                   <Input
                     icon='user'
                     iconPosition='left'

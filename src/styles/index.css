@@ -99,3 +99,16 @@ input[type=password] {
   height: calc(100vh - 75px);
   overflow-y: auto;
 }
+
+.detail-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 3rem;
+  font-weight: bold;
+  line-height: 1.5;
+  text-align: center;
+  flex: 1;
+}
+

@@ -1,4 +1,4 @@
-import { GET_CONTACTS } from '../action/types'
+import { GET_CONTACTS, SELECT_CONTACT } from '../action/types'
 
 const initialState = {
   contactList: [],
@@ -9,12 +9,15 @@ const initialState = {
 const contactReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_CONTACTS:
+      return {
+        ...state,
+        contactList: action.payload
+      }
+    case SELECT_CONTACT:
       console.log(action)
       return {
         ...state,
-        ...{
-          contactList: action.payload
-        }
+        selectedContact: action.payload
       }
     default:
       return state
