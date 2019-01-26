@@ -17,7 +17,7 @@ const inputValidate = data => {
   }
 
   if (!data.phone.match(phone_regex)) {
-    errors.phone = 'length must be 10 symbols and only: numbers, "+", "(/)"'
+    errors.phone = 'only: numbers, "+", "(/)"'
   }
 
   if (!data.email.match(email_regex)) {

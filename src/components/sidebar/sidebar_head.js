@@ -6,7 +6,6 @@ import {
   Image,
   Header,
   Icon,
-  Input,
   Modal,
   Divider,
   Form
@@ -187,7 +186,6 @@ class SidebarHead extends Component {
                 <Grid.Row>
                   <input
                     icon='briefcase'
-                    iconPosition='left'
                     placeholder='Company'
                     name='company'
                     value={company}

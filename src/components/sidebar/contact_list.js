@@ -13,9 +13,6 @@ class ContactList extends Component {
 
   componentDidMount() {
     this.props.getContacts()
-    this.setState({
-      contacts: this.props.contacts
-    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -23,6 +20,13 @@ class ContactList extends Component {
       contacts: nextProps.foundContacts
     })
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.contacts !== prevProps.contacts) {
+      this.setState({ contacts: this.props.contacts })
+    }
+  }
+
 
   render() {
     const { contacts } = this.state
