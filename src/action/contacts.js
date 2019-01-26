@@ -1,5 +1,5 @@
 import { contactsRef } from '../config/firebase'
-import { GET_CONTACTS, SELECT_CONTACT } from './types'
+import { GET_CONTACTS, SELECT_CONTACT, SEARCH_CONTACTS } from './types'
 
 export const getContacts = () => dispatch => {
   contactsRef.on('value', snapshot => {
@@ -22,5 +22,12 @@ export const selectContact = contact => dispatch => {
   dispatch({
     type: SELECT_CONTACT,
     payload: contact
+  })
+}
+
+export const searchContacts = contacts => dispatch => {
+  dispatch({
+    type: SEARCH_CONTACTS,
+    payload: contacts
   })
 }

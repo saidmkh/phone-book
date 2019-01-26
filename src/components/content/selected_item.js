@@ -38,7 +38,6 @@ class SelectedItem extends Component {
     const { open, edit } = this.state
     const { contact, contactId } = this.props
 
-    console.log(this.props)
     return (
       <Item.Group relaxed>
         <Item>

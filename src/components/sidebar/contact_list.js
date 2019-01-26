@@ -7,12 +7,26 @@ import { getContacts } from '../../action/contacts'
 
 
 class ContactList extends Component {
+  state = {
+    contacts: []
+  }
+
   componentDidMount() {
     this.props.getContacts()
+    this.setState({
+      contacts: this.props.contacts
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.contacts.foundContacts)
+    this.setState({
+      contacts: nextProps.foundContacts
+    })
   }
 
   render() {
-    const { contacts } = this.props
+    const { contacts } = this.state
 
     return (
       <div className="contact__list">
@@ -32,7 +46,8 @@ class ContactList extends Component {
 }
 
 const mapStateToProps = store => ({
-  contacts: store.contacts.contactList
+  contacts: store.contacts.contactList,
+  foundContacts: store.contacts.foundContacts
 })
 
 export default connect(mapStateToProps, { getContacts })(ContactList)

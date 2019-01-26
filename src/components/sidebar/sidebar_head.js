@@ -14,7 +14,7 @@ import {
 
 import SearchBlock from './search_block'
 import { changeStateValue } from '../../_helpers/functions'
-import { phoneBookStorage, contactsRef } from '../../config/firebase'
+import { phoneBookStorage } from '../../config/firebase'
 import { addContact } from '../../action/contacts'
 
 class SidebarHead extends Component {
