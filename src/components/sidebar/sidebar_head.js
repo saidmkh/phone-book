@@ -8,11 +8,12 @@ import {
   Icon,
   Modal,
   Divider,
-  Form
+  Form,
+  Progress
 } from 'semantic-ui-react'
 
 import SearchBlock from './search_block'
-import { changeStateValue } from '../../_helpers/functions'
+import { changeStateValue, uploadPhoto } from '../../_helpers/functions'
 import { phoneBookStorage } from '../../config/firebase'
 import { addContact } from '../../action/contacts'
 import inputValidate from '../../_helpers/input_validate'
@@ -35,7 +36,6 @@ class SidebarHead extends Component {
     this.state = { ...this.initialState }
 
     this.handleImageChange = this.handleImageChange.bind(this)
-    this.uploadPhoto = this.uploadPhoto.bind(this)
     this.saveContact = this.saveContact.bind(this)
   }
 
@@ -50,35 +50,11 @@ class SidebarHead extends Component {
   handleImageChange = (e) => {
     if (e.target.files[0]) {
       const image = e.target.files[0]
-      this.setState({ image: image })
+      this.setState({ image })
     }
   }
 
-  uploadPhoto = () => {
-    const { image } = this.state
-    console.log(image)
-    const uploadImage = phoneBookStorage.ref(`images/${image.name}`).put(image);
-    uploadImage.on('state_changed',
-      snapshot => {
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        this.setState({ progress });
-      },
-      err => {
-        console.log(err)
-      },
-      () => {
-        phoneBookStorage.ref('images').child(image.name).getDownloadURL()
-          .then(url => {
-            this.setState({
-              photoUrl: url
-            })
-          })
-      }
-    )
-  }
-
   saveContact = (e) => {
-    console.log('save con')
     e.preventDefault()
 
     const { fullname, phone, email, company, photoUrl } = this.state
@@ -94,7 +70,6 @@ class SidebarHead extends Component {
 
     const { errors, validate } = inputValidate(Contact)
 
-
     if (!validate) {
       this.setState({
         errors: errors
@@ -104,12 +79,11 @@ class SidebarHead extends Component {
     }
 
     addContact(Contact)
-
     this.resetState()
   }
 
   render() {
-    const { fullname, phone, email, company, photoUrl, open, progress, errors } = this.state
+    const { fullname, phone, email, company, photoUrl, open, progress, errors, image } = this.state
 
     return (
       <div className="sidebar__head">
@@ -134,16 +108,21 @@ class SidebarHead extends Component {
                   size='small'
                   rounded
                 />
-                <progress className={`${progress === 0 ? 'progress-hidden' : null} progress-bar`} value={progress} max="100" />
+                <Progress
+                  size='tiny'
+                  className={`${progress === 0 ? 'progress-hidden' : null} progress-bar`}
+                  percent={progress}
+                  success
+                />
                 <input
                   className="file-input"
                   type='file'
                   accept='image/*'
                   onChange={this.handleImageChange}
                 />
-                <Button onClick={this.uploadPhoto} color='orange'>
+                <Button onClick={uploadPhoto.bind(this, image, progress)} color='orange'>
                   <Icon name='upload' /> upload
-              </Button>
+                </Button>
                 {errors.photoUrl ? <div className="input-errors">{errors.photoUrl}</div> : null}
               </div>
               <Divider />

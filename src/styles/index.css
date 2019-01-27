@@ -125,7 +125,8 @@ input[type=password] {
 }
 
 .progress-bar {
-  margin-top: 1rem;
+  width: 100%;
+  margin-bottom: 0!important;
 }
 
 .progress-hidden {
@@ -133,10 +134,12 @@ input[type=password] {
 }
 
 .input-errors {
+  position: absolute;
+  bottom: -0.5rem;
   width: 100%;
-  padding: .3rem;
-  background-color: rgba(250, 28, 28, 0.2);
-  font-size: 1rem;
+  padding: .1rem 1rem;
+  background-color: rgba(248, 0, 0, 0.377);
+  font-size: .9rem;
   color: white;
   border-radius: 3px;
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { List } from 'semantic-ui-react'
+import { List, Loader } from 'semantic-ui-react'
 
 import ContactItem from './contact_item'
 import { getContacts } from '../../action/contacts'
@@ -8,7 +8,8 @@ import { getContacts } from '../../action/contacts'
 
 class ContactList extends Component {
   state = {
-    contacts: this.props.contacts
+    contacts: [],
+    loader: true
   }
 
   componentDidMount() {
@@ -23,26 +24,33 @@ class ContactList extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     if (this.props.contacts !== prevProps.contacts) {
-      this.setState({ contacts: this.props.contacts })
+      this.setState({
+        contacts: this.props.contacts,
+        loader: false
+      })
     }
   }
 
 
   render() {
-    const { contacts } = this.state
+    const { contacts, loader } = this.state
 
     return (
       <div className="contact__list">
-        <List selection>
-          {contacts.map((obj, idx) => {
-            return (
-              <ContactItem
-                key={idx}
-                obj={obj}
-              />
-            )
-          })}
-        </List>
+        {loader ?
+          <Loader active inline='centered' />
+          :
+          <List selection>
+            {contacts.map((obj, idx) => {
+              return (
+                <ContactItem
+                  key={idx}
+                  obj={obj}
+                />
+              )
+            })}
+          </List>
+        }
       </div>
     )
   }

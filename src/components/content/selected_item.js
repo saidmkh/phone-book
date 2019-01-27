@@ -14,7 +14,8 @@ import {
 } from 'semantic-ui-react'
 
 import { deleteContact, selectContact, updateContact } from '../../action/contacts'
-import { changeStateValue } from '../../_helpers/functions'
+import { changeStateValue, uploadPhoto } from '../../_helpers/functions'
+import inputValidate from '../../_helpers/input_validate'
 
 class SelectedItem extends Component {
   constructor(props) {
@@ -24,11 +25,15 @@ class SelectedItem extends Component {
       phone: '',
       email: '',
       company: '',
+      photoUrl: '',
+      image: null,
+      progress: 0,
       open: false,
       edit: false
     }
 
     this.state = { ...this.initialState }
+    this.handleImageChange = this.handleImageChange.bind(this)
   }
 
   resetState = () => {
@@ -40,13 +45,23 @@ class SelectedItem extends Component {
   close = () => this.setState({ open: false })
 
   editClick = () => {
+    const { fullname, phone, email, company, photoUrl } = this.props.contact
+
     this.setState({
       edit: true,
-      fullname: this.props.contact.fullname,
-      phone: this.props.contact.phone,
-      email: this.props.contact.email,
-      company: this.props.contact.company
+      fullname,
+      phone,
+      email,
+      company,
+      photoUrl
     })
+  }
+
+  handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      const image = e.target.files[0]
+      this.setState({ image })
+    }
   }
 
   removeContact = (contactId) => {
@@ -55,87 +70,130 @@ class SelectedItem extends Component {
     this.setState({ open: false })
   }
 
-  updateContact = (contactId) => {
+  handleUpdateContact = (contactId) => {
+    const { fullname, phone, email, company, photoUrl } = this.state
+    const { updateContact } = this.props
+
     const Contact = {
-      fullname: this.state.fullname,
-      phone: this.state.phone,
-      email: this.state.email,
-      company: this.state.company
+      fullname,
+      phone,
+      email,
+      company,
+      photoUrl
     }
 
-    //this.props.updateContact(Contact, contactId)
-  }
+    const { errors, validate } = inputValidate(Contact)
 
-  componentWillUnmount() {
+    if (!validate) {
+      this.setState({
+        errors: errors
+      })
+
+      return false
+    }
+
+    updateContact(Contact, contactId)
     this.resetState()
   }
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.contact !== prevProps.contact) {
+      this.resetState()
+    }
+  }
+
   render() {
-    console.log('state', this.state)
-    const { open, edit, fullname, phone, email, company } = this.state
+    const { open, edit, fullname, phone, email, company, image, progress, photoUrl } = this.state
     const { contact, contactId } = this.props
-
     return (
-      <Item.Group relaxed>
-        <Item>
-          <Item.Image
-            src={contact.photoUrl || 'https://react.semantic-ui.com/images/wireframe/image.png'}
-            size='small'
-            rounded
-          />
-          <Item.Content>
-
-            {edit ?
-              <React.Fragment>
-                <Input
-                  value={fullname}
-                  onChange={changeStateValue.bind(this)}
-                  size='big'
+      <React.Fragment>
+        {edit ?
+          <Item.Group relaxed>
+            <Item>
+              <div className="image__container">
+                <Item.Image
+                  src={photoUrl || 'https://react.semantic-ui.com/images/wireframe/image.png'}
+                  size='small'
+                  rounded
                 />
-                <Item.Extra>
-                  <Input
-                    iconPosition='left'
-                    icon='phone'
-                    value={phone}
-                    onChange={changeStateValue.bind(this)}
-                  />
-                </Item.Extra>
-                <Divider />
-                <Item.Extra>
-                  <Input
-                    iconPosition='left'
-                    icon='mail'
-                    value={email}
-                    onChange={changeStateValue.bind(this)}
-                  />
-                </Item.Extra>
-                <Item.Extra>
-                  <Input
-                    iconPosition='left'
-                    icon='briefcase'
-                    value={company}
-                    onChange={changeStateValue.bind(this)}
-                  />
-                </Item.Extra>
-                <Item.Extra>
-                  <Button
-                    color='green'
-                    title='Save'
-                    icon='save'
-                    floated='right'
-                    onClick={this.updateContact(contactId)}
-                  />
-                  <Button
-                    color='orange'
-                    title='Cancel'
-                    icon='delete'
-                    floated='right'
-                    onClick={() => this.setState({ edit: false })}
-                  />
-                </Item.Extra>
-              </React.Fragment>
-              :
-              <React.Fragment>
+                <input
+                  className="file-input"
+                  type='file'
+                  accept='image/*'
+                  onChange={this.handleImageChange}
+                />
+                <Button onClick={uploadPhoto.bind(this, image, progress)} color='orange'>
+                  <Icon name='upload' /> upload
+                </Button>
+              </div>
+              <Item.Content>
+                <form onSubmit={() => this.handleUpdateContact(contactId)}>
+                  <Item.Extra>
+                    <Input
+                      name='fullname'
+                      value={fullname}
+                      onChange={changeStateValue.bind(this)}
+                      size='big'
+                    />
+                  </Item.Extra>
+                  <Item.Extra>
+                    <Input
+                      name='phone'
+                      iconPosition='left'
+                      icon='phone'
+                      value={phone}
+                      onChange={changeStateValue.bind(this)}
+                    />
+                  </Item.Extra>
+                  <Divider />
+                  <Item.Extra>
+                    <Input
+                      type='email'
+                      name='email'
+                      iconPosition='left'
+                      icon='mail'
+                      value={email}
+                      onChange={changeStateValue.bind(this)}
+                    />
+                  </Item.Extra>
+                  <Item.Extra>
+                    <Input
+                      name='company'
+                      iconPosition='left'
+                      icon='briefcase'
+                      value={company}
+                      onChange={changeStateValue.bind(this)}
+                    />
+                  </Item.Extra>
+                  <Item.Extra>
+                    <Button
+                      type='submit'
+                      color='green'
+                      title='Save'
+                      icon='save'
+                      floated='right'
+                    />
+                    <Button
+                      color='orange'
+                      title='Cancel'
+                      icon='delete'
+                      floated='right'
+                      onClick={() => this.setState({ edit: false })}
+                    />
+                  </Item.Extra>
+                </form>
+              </Item.Content>
+            </Item>
+          </Item.Group>
+          :
+          <Item.Group relaxed>
+            <Item>
+              <Item.Image
+                src={contact.photoUrl || 'https://react.semantic-ui.com/images/wireframe/image.png'}
+                size='small'
+                rounded
+              />
+              <Item.Content>
                 <Item.Header>{contact.fullname}</Item.Header>
                 <Item.Extra>
                   <Icon color='green' name='phone' />{contact.phone}
@@ -147,34 +205,34 @@ class SelectedItem extends Component {
                 <Item.Extra>
                   <Icon color='green' name='briefcase' />{contact.company}
                 </Item.Extra>
-              </React.Fragment>
-            }
+              </Item.Content>
+            </Item>
+          </Item.Group>
+        }
 
-            <Item.Extra>
-              <Button
-                floated='right'
-                icon='trash alternate outline'
-                color='red'
-                title='Delete'
-                onClick={this.open}
-              />
-              <Confirm
-                size='mini'
-                open={open}
-                onCancel={this.close}
-                onConfirm={() => this.removeContact(contactId)}
-              />
-              <Button
-                color='yellow'
-                title='Edit'
-                icon='edit'
-                floated='right'
-                onClick={this.editClick}
-              />
-            </Item.Extra>
-          </Item.Content>
-        </Item>
-      </Item.Group>
+        <Item.Extra>
+          <Button
+            floated='right'
+            icon='trash alternate outline'
+            color='red'
+            title='Delete'
+            onClick={this.open}
+          />
+          <Confirm
+            size='mini'
+            open={open}
+            onCancel={this.close}
+            onConfirm={() => this.removeContact(contactId)}
+          />
+          <Button
+            color='yellow'
+            title='Edit'
+            icon='edit'
+            floated='right'
+            onClick={this.editClick}
+          />
+        </Item.Extra>
+      </React.Fragment>
     )
   }
 }

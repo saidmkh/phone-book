@@ -24,7 +24,11 @@ const inputValidate = data => {
     errors.email = 'email is not valid'
   }
 
-  if (data.company.length < 2 && data.company > 50) {
+  if (data.company.length < 2 && data.company.length > 50) {
+    errors.company = 'Company name must between 2 and 50 symbols'
+  }
+
+  if (data.phone.length < 10 && data.phone.length > 13) {
     errors.company = 'Company name must between 2 and 50 symbols'
   }
 

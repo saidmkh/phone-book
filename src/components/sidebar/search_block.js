@@ -6,10 +6,8 @@ import { searchContacts } from '../../action/contacts'
 
 class SearchBlock extends Component {
   searchContacts = e => {
-    console.log(e)
     const { contacts, searchContacts } = this.props
     let value = e.target.value.toLowerCase()
-    console.log(contacts)
 
     let foundContacts = contacts.filter(item => {
       if (value === '') {
@@ -23,12 +21,11 @@ class SearchBlock extends Component {
         return fullnameValue || phoneValue || emailValue || companyValue
       }
     })
-    console.log(foundContacts)
+
     searchContacts(foundContacts)
   }
 
   render() {
-    console.log('redner')
     return (
       <div className="search_block">
         <Input
