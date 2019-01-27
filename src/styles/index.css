@@ -143,3 +143,33 @@ input[type=password] {
   color: white;
   border-radius: 3px;
 }
+
+.toggle-content {
+  margin-left: -300px;
+}
+
+.burger-menu {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+.burger-menu:hover {
+  background-color: #eee;
+}
+
+.burger-menu--line {
+  width: 16px;
+  height: 2px;
+  background-color: black;
+  margin: 3.5px 0;
+}

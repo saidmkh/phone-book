@@ -59,7 +59,6 @@ class SidebarHead extends Component {
 
     const { fullname, phone, email, company, photoUrl } = this.state
     const { addContact } = this.props
-
     const Contact = {
       fullname,
       phone,
@@ -67,7 +66,6 @@ class SidebarHead extends Component {
       company,
       photoUrl
     }
-
     const { errors, validate } = inputValidate(Contact)
 
     if (!validate) {

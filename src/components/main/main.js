@@ -1,13 +1,13 @@
 import React from 'react'
 
 import Sidebar from '../sidebar/sidebar'
-import Content from '../content/content'
+import ContentContainer from '../content/content_container'
 
 const Main = () => {
   return (
     <div className="wrapper">
       <Sidebar />
-      <Content />
+      <ContentContainer />
     </div>
   )
 }

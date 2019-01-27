@@ -9,7 +9,7 @@ class Content extends Component {
 
     if (contact) {
       return (
-        <div className="main__content">
+        <div className="main__content--item">
           <SelectedItem />
         </div>
       )

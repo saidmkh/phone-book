@@ -70,10 +70,11 @@ class SelectedItem extends Component {
     this.setState({ open: false })
   }
 
-  handleUpdateContact = (contactId) => {
+  handleUpdateContact = (contactId, e) => {
+    e.preventDefault()
+
     const { fullname, phone, email, company, photoUrl } = this.state
     const { updateContact } = this.props
-
     const Contact = {
       fullname,
       phone,
@@ -81,7 +82,6 @@ class SelectedItem extends Component {
       company,
       photoUrl
     }
-
     const { errors, validate } = inputValidate(Contact)
 
     if (!validate) {
@@ -102,9 +102,15 @@ class SelectedItem extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.contact !== this.state.contact;
+  }
+
   render() {
     const { open, edit, fullname, phone, email, company, image, progress, photoUrl } = this.state
     const { contact, contactId } = this.props
+
+    console.log('render Item')
     return (
       <React.Fragment>
         {edit ?
@@ -127,7 +133,7 @@ class SelectedItem extends Component {
                 </Button>
               </div>
               <Item.Content>
-                <form onSubmit={() => this.handleUpdateContact(contactId)}>
+                <form onSubmit={(e) => this.handleUpdateContact(contactId, e)}>
                   <Item.Extra>
                     <Input
                       name='fullname'
