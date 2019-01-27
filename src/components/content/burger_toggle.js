@@ -1,8 +1,8 @@
 import React from 'react'
 
 const mainSideToggle = () => {
-  const content = document.getElementsByClassName('main__content')[0];
-  content.classList.toggle('toggle-content');
+  const content = document.getElementsByClassName('main__content')[0]
+  content.classList.toggle('toggle-content')
 }
 
 

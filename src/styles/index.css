@@ -134,14 +134,12 @@ input[type=password] {
 }
 
 .input-errors {
-  position: absolute;
-  bottom: -0.5rem;
-  width: 100%;
+  width: fit-content;
   padding: .1rem 1rem;
-  background-color: rgba(248, 0, 0, 0.377);
   font-size: .9rem;
-  color: white;
+  color: red;
   border-radius: 3px;
+  margin: 0;
 }
 
 .toggle-content {

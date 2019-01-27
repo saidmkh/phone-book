@@ -30,7 +30,7 @@ class SearchBlock extends Component {
       <div className="search_block">
         <Input
           fluid
-          icon='users'
+          icon='search'
           placeholder='Search contact'
           onChange={this.searchContacts.bind(this)}
         />

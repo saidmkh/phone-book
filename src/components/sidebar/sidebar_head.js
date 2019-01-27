@@ -93,7 +93,7 @@ class SidebarHead extends Component {
           open={open}
           onOpen={this.open}
           onClose={this.close}
-          trigger={<Button title='Add contact' icon='add' />}
+          trigger={<Button title='Add contact' icon='user plus' />}
           closeIcon
         >
           <Header content='Create new contact' />

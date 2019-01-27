@@ -29,7 +29,8 @@ class SelectedItem extends Component {
       image: null,
       progress: 0,
       open: false,
-      edit: false
+      edit: false,
+      errors: {}
     }
 
     this.state = { ...this.initialState }
@@ -45,7 +46,7 @@ class SelectedItem extends Component {
   close = () => this.setState({ open: false })
 
   editClick = () => {
-    const { fullname, phone, email, company, photoUrl } = this.props.contact
+    const { fullname, phone, email, company, photoUrl } = this.props.contactInfo
 
     this.setState({
       edit: true,
@@ -64,17 +65,19 @@ class SelectedItem extends Component {
     }
   }
 
-  removeContact = (contactId) => {
-    this.props.deleteContact(contactId)
-    this.props.selectContact(null)
+  removeContact = () => {
+    const { deleteContact, selectContact, contactId } = this.props
+
+    deleteContact(contactId)
+    selectContact(null)
     this.setState({ open: false })
   }
 
-  handleUpdateContact = (contactId, e) => {
+  handleUpdateContact = (e) => {
     e.preventDefault()
 
     const { fullname, phone, email, company, photoUrl } = this.state
-    const { updateContact } = this.props
+    const { updateContact, contactId } = this.props
     const Contact = {
       fullname,
       phone,
@@ -107,8 +110,8 @@ class SelectedItem extends Component {
   }
 
   render() {
-    const { open, edit, fullname, phone, email, company, image, progress, photoUrl } = this.state
-    const { contact, contactId } = this.props
+    const { open, edit, fullname, phone, email, company, image, progress, photoUrl, errors } = this.state
+    const { contactInfo, contactId } = this.props
 
     console.log('render Item')
     return (
@@ -133,14 +136,16 @@ class SelectedItem extends Component {
                 </Button>
               </div>
               <Item.Content>
-                <form onSubmit={(e) => this.handleUpdateContact(contactId, e)}>
+                <form onSubmit={(e) => this.handleUpdateContact(e)}>
                   <Item.Extra>
                     <Input
                       name='fullname'
+                      iconPosition='left'
+                      icon='user'
                       value={fullname}
                       onChange={changeStateValue.bind(this)}
-                      size='big'
                     />
+                    {errors.fullname ? <div className="input-errors">{errors.fullname}</div> : null}
                   </Item.Extra>
                   <Item.Extra>
                     <Input
@@ -150,6 +155,7 @@ class SelectedItem extends Component {
                       value={phone}
                       onChange={changeStateValue.bind(this)}
                     />
+                    {errors.phone ? <div className="input-errors">{errors.phone}</div> : null}
                   </Item.Extra>
                   <Divider />
                   <Item.Extra>
@@ -161,6 +167,7 @@ class SelectedItem extends Component {
                       value={email}
                       onChange={changeStateValue.bind(this)}
                     />
+                    {errors.email ? <div className="input-errors">{errors.email}</div> : null}
                   </Item.Extra>
                   <Item.Extra>
                     <Input
@@ -170,8 +177,8 @@ class SelectedItem extends Component {
                       value={company}
                       onChange={changeStateValue.bind(this)}
                     />
+                    {errors.company ? <div className="input-errors">{errors.company}</div> : null}
                   </Item.Extra>
-                  <Item.Extra>
                     <Button
                       type='submit'
                       color='green'
@@ -186,7 +193,6 @@ class SelectedItem extends Component {
                       floated='right'
                       onClick={() => this.setState({ edit: false })}
                     />
-                  </Item.Extra>
                 </form>
               </Item.Content>
             </Item>
@@ -195,21 +201,21 @@ class SelectedItem extends Component {
           <Item.Group relaxed>
             <Item>
               <Item.Image
-                src={contact.photoUrl || 'https://react.semantic-ui.com/images/wireframe/image.png'}
+                src={contactInfo.photoUrl || 'https://react.semantic-ui.com/images/wireframe/image.png'}
                 size='small'
                 rounded
               />
               <Item.Content>
-                <Item.Header>{contact.fullname}</Item.Header>
+                <Item.Header>{contactInfo.fullname}</Item.Header>
                 <Item.Extra>
-                  <Icon color='green' name='phone' />{contact.phone}
+                  <Icon color='green' name='phone' />{contactInfo.phone}
                 </Item.Extra>
                 <Divider />
                 <Item.Extra>
-                  <Icon color='green' name='mail' />{contact.email}
+                  <Icon color='green' name='mail' />{contactInfo.email}
                 </Item.Extra>
                 <Item.Extra>
-                  <Icon color='green' name='briefcase' />{contact.company}
+                  <Icon color='green' name='briefcase' />{contactInfo.company}
                 </Item.Extra>
               </Item.Content>
             </Item>
@@ -244,7 +250,8 @@ class SelectedItem extends Component {
 }
 
 const mapStateToProps = store => ({
-  contact: store.contacts.selectedContact[1],
+  contact: store.contacts.selectedContact,
+  contactInfo: store.contacts.selectedContact[1],
   contactId: store.contacts.selectedContact[0]
 })
 
