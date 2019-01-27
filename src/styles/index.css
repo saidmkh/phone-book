@@ -171,3 +171,18 @@ input[type=password] {
   background-color: black;
   margin: 3.5px 0;
 }
+
+.item__input {
+  padding: .5rem .5rem .4rem;
+  font-size: 1.2rem;
+  border-radius: 2px;
+  max-width: 300px;
+  width: 100%;
+  border: 1px solid rgb(148, 148, 148);
+  background-color: transparent;
+}
+
+.item__input:disabled {
+  color: black;
+  border: unset;
+}

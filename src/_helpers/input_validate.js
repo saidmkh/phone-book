@@ -1,9 +1,10 @@
 import isEmpty from './isEmpty'
 
 const inputValidate = data => {
-  const fullname_regex = /^[a-z ,.'-]+$/i
+  const fullname_regex = /^[a-zа-я ,.'-]+$/i
   const email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   const phone_regex = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g
+  const company_regex = /^[a-zа-я0-9():*#@№!?=+ ,.'-]+$/i
   let errors = {}
 
   data.fullname = !isEmpty(data.fullname) ? data.fullname : ''
@@ -16,20 +17,16 @@ const inputValidate = data => {
     errors.fullname = 'Name is not valid'
   }
 
-  if (!data.phone.match(phone_regex)) {
-    errors.phone = 'only: numbers, "+", "(/)"'
+  if (!data.phone.match(phone_regex) && data.phone.length < 10 && data.phone.length > 13) {
+    errors.phone = 'only: numbers, "+", "(/)" and count of numbers between 10 and 13'
   }
 
   if (!data.email.match(email_regex)) {
     errors.email = 'email is not valid'
   }
 
-  if (data.company.length < 2 && data.company.length > 50) {
-    errors.company = 'Company name must between 2 and 50 symbols'
-  }
-
-  if (data.phone.length < 10 && data.phone.length > 13) {
-    errors.company = 'Company name must between 2 and 50 symbols'
+  if (!data.company.match(company_regex)) {
+    errors.email = 'company name is not valid'
   }
 
   return {
