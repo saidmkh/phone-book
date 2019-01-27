@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
-  Grid,
   Button,
-  Image,
-  Header,
   Icon,
-  Input,
-  Modal,
   Item,
   Divider,
   Confirm
@@ -39,6 +34,19 @@ class SelectedItem extends Component {
 
   resetState = () => {
     this.setState({ ...this.initialState })
+  }
+
+  resetStateToProps = () => {
+    const { fullname, phone, email, company, photoUrl, edit } = this.props.contactInfo
+
+    this.setState({
+      fullname,
+      phone,
+      email,
+      company,
+      photoUrl,
+      edit: false
+    })
   }
 
   open = () => this.setState({ open: true })
@@ -96,30 +104,17 @@ class SelectedItem extends Component {
     })
   }
 
-  componentDidMount = () => {
-    const { fullname, phone, email, company, photoUrl } = this.props.contactInfo
+  handleCancelUpdate = () => {
+    this.resetStateToProps()
+  }
 
-    this.setState({
-      fullname,
-      phone,
-      email,
-      company,
-      photoUrl
-    })
+  componentDidMount = () => {
+    this.resetStateToProps()
   }
 
   componentDidUpdate(prevProps) {
-    const { fullname, phone, email, company, photoUrl } = this.props.contactInfo
-
     if (prevProps.contactInfo !== this.props.contactInfo) {
-      this.setState({
-        fullname,
-        phone,
-        email,
-        company,
-        photoUrl,
-        edit: false
-      })
+      this.resetStateToProps()
     }
   }
 
@@ -156,27 +151,32 @@ class SelectedItem extends Component {
             <Item.Content>
               <form onSubmit={(e) => this.handleUpdateContact(e)}>
                 <Item.Extra>
+                  <Icon name='user' />
                   <input
                     className="item__input"
                     name='fullname'
                     value={fullname}
                     onChange={changeStateValue.bind(this)}
                     disabled={edit ? false : true}
+                    maxLength='60'
                   />
                   {errors.fullname ? <div className="input-errors">{errors.fullname}</div> : null}
                 </Item.Extra>
                 <Item.Extra>
+                  <Icon name='phone' />
                   <input
                     className="item__input"
                     name='phone'
                     value={phone}
                     onChange={changeStateValue.bind(this)}
                     disabled={edit ? false : true}
+                    maxLength='13'
                   />
                   {errors.phone ? <div className="input-errors">{errors.phone}</div> : null}
                 </Item.Extra>
                 <Divider />
                 <Item.Extra>
+                  <Icon name='mail' />
                   <input
                     className="item__input"
                     type='email'
@@ -188,12 +188,14 @@ class SelectedItem extends Component {
                   {errors.email ? <div className="input-errors">{errors.email}</div> : null}
                 </Item.Extra>
                 <Item.Extra>
+                  <Icon name='briefcase' />
                   <input
                     className="item__input"
                     name='company'
                     value={company}
                     onChange={changeStateValue.bind(this)}
                     disabled={edit ? false : true}
+                    maxLength='60'
                   />
                   {errors.company ? <div className="input-errors">{errors.company}</div> : null}
                 </Item.Extra>
@@ -211,7 +213,7 @@ class SelectedItem extends Component {
                       title='Cancel'
                       icon='delete'
                       floated='right'
-                      onClick={() => this.setState({ edit: false, errors: {} })}
+                      onClick={this.handleCancelUpdate}
                     />
                   </React.Fragment>
                   :

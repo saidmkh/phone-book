@@ -7,6 +7,10 @@ export function changeStateValue(e) {
 }
 
 export function uploadPhoto(image, progress) {
+  if (!image) {
+    return false
+  }
+  
   const uploadImage = phoneBookStorage.ref(`images/${image.name}`).put(image);
   uploadImage.on('state_changed',
     snapshot => {

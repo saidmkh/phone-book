@@ -1,0 +1,37 @@
+@media all and (max-width: 650px) {
+  .toggle-content {
+    padding: 1.5rem;
+  }
+
+  .detail-placeholder {
+    font-size: 2rem;
+  }
+}
+
+@media all and (max-width: 450px) {
+  .main__content {
+    padding: 25rem;
+  }
+
+  .sidebar {
+    min-width: 270px;
+    width: 270px;
+  }
+
+  .toggle-content {
+    margin-left: -270px;
+    padding: 1.5rem;
+  }
+}
+
+@media all and (max-width: 350px) {
+  .sidebar {
+    min-width: 240px;
+    width: 240px;
+  }
+
+  .toggle-content {
+    margin-left: -240px;
+  }
+}
+

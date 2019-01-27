@@ -132,6 +132,7 @@ class SidebarHead extends Component {
                     name='fullname'
                     value={fullname}
                     onChange={changeStateValue.bind(this)}
+                    maxLength='60'
                     required
                   />
                   {errors.fullname ? <div className="input-errors">{errors.fullname}</div> : null}
@@ -144,6 +145,7 @@ class SidebarHead extends Component {
                     name='phone'
                     value={phone}
                     onChange={changeStateValue.bind(this)}
+                    maxLength='13'
                     required
                   />
                   {errors.phone ? <div className="input-errors">{errors.phone}</div> : null}
@@ -167,6 +169,7 @@ class SidebarHead extends Component {
                     name='company'
                     value={company}
                     onChange={changeStateValue.bind(this)}
+                    maxLength='60'
                     required
                   />
                   {errors.company ? <div className="input-errors">{errors.company}</div> : null}

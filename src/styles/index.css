@@ -65,6 +65,7 @@ input[type=password] {
   height: 100vh;
   display: flex;
   flex: auto;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -89,7 +90,7 @@ input[type=password] {
   background-color: white;
   border-radius: 10px;
   box-shadow: -7px 0 19px -1px rgba(0, 0, 0, 0.18);
-  padding: 4.6rem;
+  padding: 2rem;
   z-index: 2;
   transition: 0.5s;
   overflow-y: auto;
@@ -113,8 +114,10 @@ input[type=password] {
 }
 
 .file-input {
- border: 0;
+ width: 185px!important;
+ border: 0!important;
  margin: 1rem!important;
+ padding: 0!important;
  cursor: pointer;
 }
 
@@ -122,6 +125,7 @@ input[type=password] {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 1rem
 }
 
 .progress-bar {

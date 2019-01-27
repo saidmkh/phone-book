@@ -17,8 +17,16 @@ const inputValidate = data => {
     errors.fullname = 'Name is not valid'
   }
 
-  if (!data.phone.match(phone_regex) && data.phone.length < 10 && data.phone.length > 13) {
-    errors.phone = 'only: numbers, "+", "(/)" and count of numbers between 10 and 13'
+  if (data.fullname.length < 2) {
+    errors.fullname = 'between 2 and 60 symbols'
+  }
+
+  if (!data.phone.match(phone_regex)) {
+    errors.phone = 'only: numbers, "+", "(/)"'
+  }
+
+  if (data.phone.length < 10) {
+    errors.phone = 'between 10 and 13 symbols'
   }
 
   if (!data.email.match(email_regex)) {
@@ -27,6 +35,10 @@ const inputValidate = data => {
 
   if (!data.company.match(company_regex)) {
     errors.email = 'company name is not valid'
+  }
+
+  if (data.company.length < 2) {
+    errors.company = 'between 2 and 60 symbols'
   }
 
   return {
