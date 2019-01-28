@@ -14,7 +14,6 @@ import {
 
 import SearchBlock from './search_block'
 import { changeStateValue, uploadPhoto } from '../../_helpers/functions'
-import { phoneBookStorage } from '../../config/firebase'
 import { addContact } from '../../action/contacts'
 import inputValidate from '../../_helpers/input_validate'
 

@@ -37,7 +37,7 @@ class SelectedItem extends Component {
   }
 
   resetStateToProps = () => {
-    const { fullname, phone, email, company, photoUrl, edit } = this.props.contactInfo
+    const { fullname, phone, email, company, photoUrl } = this.props.contactInfo
 
     this.setState({
       fullname,
