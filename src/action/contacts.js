@@ -19,12 +19,14 @@ export const deleteContact = contactId => dispatch => {
 }
 
 export const updateContact = (contact, contactId) => dispatch => {
+  const { fullname, phone, email, company, photoUrl } = contact
+
   contactsRef.child(contactId).update({
-    fullname: contact.fullname,
-    phone: contact.phone,
-    email: contact.email,
-    company: contact.company,
-    photoUrl: contact.photoUrl
+    fullname,
+    phone,
+    email,
+    company,
+    photoUrl
   })
 }
 
