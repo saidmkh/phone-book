@@ -45,7 +45,8 @@ class SelectedItem extends Component {
       email,
       company,
       photoUrl,
-      edit: false
+      edit: false,
+      errors: {}
     })
   }
 

@@ -15,11 +15,6 @@ input[type=password] {
     box-sizing : border-box;
 }
 
-html {
-  font-size: 10px;
-  line-height: 1.4;
-}
-
 body {
   margin: 0;
   padding: 0;
